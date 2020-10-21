@@ -27,7 +27,7 @@ if (uc.packageName == currentPackage()) {
     while (uc.packageName == currentPackage()) {
         console.log("正在尝试关闭淘宝")
         back();
-        sleep(delay);
+        sleep(250);
     }
 }
 
