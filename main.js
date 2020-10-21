@@ -103,15 +103,17 @@ while (num++ < 4) {
             sleep(delay);
             num = 0;
         }
-    } else if (uc.FindByText("领取奖励")) {
-        uc.Click();
-        console.log(uc.allView[uc.index].text());
-        sleep(delay);
     } else break;
     sleep(delay);
 }
 
 console.log("浏览任务完成");
+
+while (uc.FindByText("领取奖励")) {
+    uc.Click();
+    console.log(uc.allView[uc.index].text());
+    sleep(delay);
+}
 
 if (uc.FindByText("关闭")) {
     uc.Click();

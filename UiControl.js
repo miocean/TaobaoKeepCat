@@ -19,8 +19,12 @@ module.exports = {
         } else {
             console.log("启动" + this.appName + "超时");
             while (this.packageName == currentPackage()) {
-                back();
-                sleep(250);
+                for (let i = 0; i < 9; i++) {
+                    back();
+                    sleep(25);
+                }
+                home();
+                sleep(25);
             }
             sleep(500);
             if (this.tryReboot-- > 0) {
@@ -42,8 +46,12 @@ module.exports = {
         } else {
             console.log("启动" + this.appName + "超时");
             while (this.packageName == currentPackage()) {
-                back();
-                sleep(250);
+                for (let i = 0; i < 9; i++) {
+                    back();
+                    sleep(25);
+                }
+                home();
+                sleep(25);
             }
             sleep(500);
             if (this.tryReboot-- > 0) {
@@ -68,12 +76,14 @@ module.exports = {
         if (this.WaitForActivity()) {
             return true;
         } else {
-            console.log("启动" + this.appName + "超时");
             while (this.packageName == currentPackage()) {
-                back();
-                sleep(250);
+                for (let i = 0; i < 9; i++) {
+                    back();
+                    sleep(25);
+                }
+                home();
+                sleep(25);
             }
-            sleep(500);
             if (this.tryReboot-- > 0) {
                 console.log("尝试重新启动" + this.appName);
                 return this.StartActivity();
