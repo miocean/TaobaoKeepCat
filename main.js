@@ -1,4 +1,4 @@
-auto;
+auto.waitFor();
 
 const uc = require("UiControl.js");
 
