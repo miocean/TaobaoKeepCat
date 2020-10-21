@@ -89,8 +89,8 @@ while (num++ < 4) {
                 if (uc.allView.length == 1) break;
             }
         }
+        console.log(uc.allView[uc.index].text());
         if (uc.Click()) {
-            console.log(uc.allView[uc.index].text());
             sleep(delay);
             overTime = new Date().getTime();
             while ((second = new Date().getTime() - overTime) <= timeout) {
@@ -102,6 +102,11 @@ while (num++ < 4) {
             }
             back();
             sleep(delay);
+            if (uc.FindByText(/.*退出.*/)) {
+                uc.Click();
+                console.log(uc.allView[uc.index].text());
+                sleep(delay);
+            }
             num = 0;
         }
     } else break;
