@@ -27,7 +27,7 @@ if (uc.packageName == currentPackage()) {
     while (uc.packageName == currentPackage()) {
         console.log("正在尝试关闭淘宝")
         back();
-        sleep(250);
+        sleep(delay);
     }
 }
 
@@ -43,19 +43,22 @@ threads.start(function () {
     }, 250);
 });
 
+
+uc.scanTimeout = 5000;
 if (uc.FindByText("活动链接")) {
     uc.Click()
     console.log(uc.allView[uc.index].text());
     sleep(delay);
 }
 
+uc.scanTimeout = 1000;
 if (uc.FindByText(/[0-9]+喵币点击领取/)) {
     uc.Click();
     console.log(uc.allView[uc.index].text());
     sleep(delay);
 }
 
-if (uc.FindByText("赚喵币")) {
+if (uc.FindByText(/赚喵币|领猫币/)) {
     uc.Click();
     console.log(uc.allView[uc.index].text());
     sleep(delay);
@@ -86,11 +89,12 @@ while (num++ < 4) {
             }
         }
         if (uc.Click()) {
-            console.log(text);
+            console.log(uc.allView[uc.index].text());
+            sleep(delay);
             overTime = new Date().getTime();
             while ((second = new Date().getTime() - overTime) <= timeout) {
                 console.log(second / 1000);
-                if (uc.FindByText(/.*完成.*/)) {
+                if (uc.FindByText(/.*完成.*/) || uc.FindByDesc(/.*完成.*/)) {
                     console.log("任务完成");
                     break;
                 }
