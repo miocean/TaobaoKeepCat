@@ -66,10 +66,27 @@ sleep(delay);
 
 num = 0;
 
+let invited = uc.FindByText(/邀请好友一起撸猫\([0-4]\/5\)/);
+let login = uc.FindByText(/登录淘宝特价版送红包\(0\/1\)/);
+
 while (num++ < 4) {
-    if (uc.FindByText(/去浏览|去逛逛|去搜索/)) {
+    if (uc.FindByText(/去浏览|去逛逛|去搜索|去完成/)) {
+        let text = uc.allView[uc.index].text();
+        if (text == "去完成") {
+            if (invited && login) {
+                if (uc.allView.length == 2) break;
+                else uc.index = 1;
+            }
+            else if (invited) {
+                if (uc.allView.length == 1) break;
+                else uc.index = 1;
+            }
+            else if (login) {
+                if (uc.allView.length == 1) break;
+            }
+        }
         if (uc.Click()) {
-            console.log(uc.allView[uc.index].text());
+            console.log(text);
             overTime = new Date().getTime();
             while ((second = new Date().getTime() - overTime) <= timeout) {
                 console.log(second / 1000);
@@ -82,60 +99,11 @@ while (num++ < 4) {
             sleep(delay);
             num = 0;
         }
-    } else {
-        break;
-    }
-    sleep(delay);
-}
-
-
-let invited = uc.FindByText(/邀请好友一起撸猫\([0-4]\/5\)/);
-let login = uc.FindByText(/登录淘宝特价版送红包\(0\/1\)/);
-
-num = 0
-
-while (num++ < 4) {
-
-    if (invited && login && uc.FindByText("去完成")) {
-        if (uc.allView.length == 2) {
-            break;
-        } else {
-            uc.index = 1;
-        }
-    } else if (invited && uc.FindByText("去完成")) {
-        if (uc.allView.length == 1) {
-            break;
-        } else {
-            uc.index = 1;
-        }
-    } else if (login && uc.FindByText("去完成")) {
-        if (uc.allView.length == 1) {
-            break;
-        }
-    }
-    if (uc.Click()) {
+    } else if (uc.FindByText("领取奖励")) {
+        uc.Click();
         console.log(uc.allView[uc.index].text());
-        overTime = new Date().getTime();
-        while (second = (new Date().getTime() - overTime) <= timeout) {
-            console.log(second / 1000);
-            if (uc.FindByText(/.*完成.*/)) {
-                console.log("任务完成");
-                break;
-            }
-        }
-        back();
         sleep(delay);
-        num = 0;
-    }
-    if (!uc.FindByText("去完成")) {
-        if (uc.FindByText("领取奖励")) {
-            uc.Click();
-            console.log(uc.allView[uc.index].text());
-            sleep(delay);
-        } else {
-            break;
-        }
-    }
+    } else break;
     sleep(delay);
 }
 
