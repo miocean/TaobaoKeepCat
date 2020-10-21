@@ -51,7 +51,7 @@ if (uc.FindByText("活动链接")) {
     sleep(delay);
 }
 
-uc.scanTimeout = 1000;
+uc.scanTimeout = 3000;
 if (uc.FindByText(/[0-9]+喵币点击领取/)) {
     uc.Click();
     console.log(uc.allView[uc.index].text());
@@ -72,6 +72,7 @@ num = 0;
 let invited = uc.FindByText(/邀请好友一起撸猫\([0-4]\/5\)/);
 let login = uc.FindByText(/登录淘宝特价版送红包\(0\/1\)/);
 
+uc.scanTimeout = 1000;
 while (num++ < 4) {
     if (uc.FindByText(/去浏览|去逛逛|去搜索|去完成/)) {
         let text = uc.allView[uc.index].text();
@@ -108,12 +109,7 @@ while (num++ < 4) {
 }
 
 console.log("浏览任务完成");
-
-while (uc.FindByText("领取奖励")) {
-    uc.Click();
-    console.log(uc.allView[uc.index].text());
-    sleep(delay);
-}
+sleep(delay);
 
 if (uc.FindByText("关闭")) {
     uc.Click();
@@ -126,7 +122,7 @@ sleep(delay);
 
 num = 0;
 while (num++ < 4) {
-    if (uc.FindByText(/.*喂猫升级.*|.*知道了.*|.*选兴趣.*|.*收下.*|.*选好了.*/)) {
+    if (uc.FindByText(/.*喂猫升级.*|.*知道了.*|.*选兴趣.*|.*收下.*|.*选好了.*|.*领取奖励.*|.*立即领取.*/)) {
         console.log(uc.allView[uc.index].text());
         uc.Click();
         num = 0;
@@ -145,18 +141,7 @@ if (uc.FindByText("关闭")) {
 }
 
 console.log("喂猫完成");
-
-if (uc.FindByText("立即领取")) {
-    uc.Click();
-    console.log(uc.allView[uc.index].text());
-    sleep(delay);
-}
-
-if (uc.FindByText("关闭")) {
-    uc.Click();
-    console.log(uc.allView[uc.index].text());
-    sleep(delay);
-}
+sleep(delay);
 
 console.log("开始撸猫200次");
 sleep(delay);
