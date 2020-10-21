@@ -88,30 +88,29 @@ while (num++ < 4) {
     sleep(delay);
 }
 
+
+let invited = uc.FindByText(/邀请好友一起撸猫\([0-4]\/5\)/);
+let login = uc.FindByText(/登录淘宝特价版送红包\(0\/1\)/);
+
 num = 0
 
 while (num++ < 4) {
-    if (uc.FindByText(/邀请好友一起撸猫\([0-4]\/5\)/) != null && uc.FindByText(/登录淘宝特价版送红包\(0\/1\)/)) {
-        if (uc.FindByText("去完成")) {
-            if (uc.allView.length == 2) {
-                break;
-            } else {
-                uc.index = 1;
-            }
+
+    if (invited && login && uc.FindByText("去完成")) {
+        if (uc.allView.length == 2) {
+            break;
+        } else {
+            uc.index = 1;
         }
-    } else if (uc.FindByText(/邀请好友一起撸猫\([0-4]\/5\)/)) {
-        if (uc.FindByText("去完成")) {
-            if (uc.allView.length == 1) {
-                break;
-            } else {
-                uc.index = 1;
-            }
+    } else if (invited && uc.FindByText("去完成")) {
+        if (uc.allView.length == 1) {
+            break;
+        } else {
+            uc.index = 1;
         }
-    } else if (uc.FindByText(/登录淘宝特价版送红包\(0\/1\)/)) {
-        if (uc.FindByText("去完成")) {
-            if (uc.allView.length == 1) {
-                break;
-            }
+    } else if (login && uc.FindByText("去完成")) {
+        if (uc.allView.length == 1) {
+            break;
         }
     }
     if (uc.Click()) {
