@@ -156,21 +156,22 @@ while (num++ < 4) {
     if (uc.FindByText(/.*喂猫升级.*|.*知道了.*|.*选兴趣.*|.*收下.*|.*选好了.*/)) {
         console.log(uc.allView[uc.index].text());
         uc.Click();
-        sleep(delay);
         num = 0;
+        sleep(delay);
+        continue;
     }
-    if (uc.FindByText(/.*喵币不足.*/)) {
+    if (uc.FindByText(/.*喵币不足.*|.*领取成就勋章.*/)) {
         break;
     }
 }
-
-console.log("喂猫完成");
 
 if (uc.FindByText("关闭")) {
     uc.Click();
     console.log(uc.allView[uc.index].text());
     sleep(delay);
 }
+
+console.log("喂猫完成");
 
 if (uc.FindByText("立即领取")) {
     uc.Click();
