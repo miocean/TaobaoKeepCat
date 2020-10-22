@@ -91,8 +91,8 @@ function BaseTask(content) {
     uc.scanTimeout = 1000;
     let index = 0;
     let endLength = 0;
-    let x = device.width / 2 + device.width / 4;
-    let y = device.height / 4;
+    let x = device.width / 4 * 3;
+    let y = device.height / 2;
     let mX = (device.width - x) / 4;
     let mY = (device.height - y) / 4;
     if (content == "去完成") {
@@ -112,7 +112,7 @@ function BaseTask(content) {
                 _overtime = new Date().getTime();
                 while ((time = new Date().getTime() - _overtime) <= _taskTimeout) {
                     swipe(x + random(-mX, mX), y + random(-mY, mY),
-                        x + random(-mX, mX), y + random(-mY, mY), 500);
+                        x + random(-mX, mX), y + random(-mY, mY), random(250, 750));
                     console.log(time / 1000 + "秒");
                     if (uc.FindByText(/.*完成.*/) || uc.FindByDesc(/.*完成.*/)) {
                         console.log("任务完成");
