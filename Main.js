@@ -93,8 +93,8 @@ function BaseTask(content) {
     let endLength = 0;
     let x = device.width / 2 + device.width / 4;
     let y = device.height / 4;
-    let mX = (device.width - x) / 2;
-    let mY = (device.height - y) / 2;
+    let mX = (device.width - x) / 4;
+    let mY = (device.height - y) / 4;
     if (content == "去完成") {
         let a = uc.FindByText(/邀请好友一起撸猫\([0-4]\/5\)/);
         let b = uc.FindByText(/登录淘宝特价版送红包\(0\/1\)/);
@@ -111,8 +111,8 @@ function BaseTask(content) {
                 sleep(_delay);
                 _overtime = new Date().getTime();
                 while ((time = new Date().getTime() - _overtime) <= _taskTimeout) {
-                    swipe(x + random(-mX, mX), y + random(-mY, 0),
-                        x + random(-mX, mX), y + random(0, mY), 1000);
+                    swipe(x + random(-mX, mX), y + random(-mY, mY),
+                        x + random(-mX, mX), y + random(-mY, mY), 500);
                     console.log(time / 1000 + "秒");
                     if (uc.FindByText(/.*完成.*/) || uc.FindByDesc(/.*完成.*/)) {
                         console.log("任务完成");
