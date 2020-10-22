@@ -10,7 +10,7 @@ result.packageName = null;
 
 result.allView = null;
 result.index = 0;
-result.launchTimeout = 5000;
+result.launchTimeout = 3000;
 result.scanTimeout = 1000;
 result.tryReboot = 3;
 
@@ -34,17 +34,12 @@ result.Launch = function () {
         return false;
     }
 
-    threads.start(function () {
-        if ((view = text("手机淘宝").findOne(3000)) != null) {
-            sleep(1000);
-            let rect = view.bounds();
-            click(rect.centerX(), rect.centerY());
-        }
-    });
-
+    this.scanTimeout = 3000;
     if (this.FindByText(this.appName)) {
+        sleep(500);
         this.ClickPoint();
     }
+    this.scanTimeout = 1000;
 
     if (!this.WaitForLaunch()) {
         console.log("启动" + this.appName + "超时");
@@ -81,7 +76,7 @@ result.WaitForLaunch = function () {
 result.FindByDesx = function (content) {
     let overtime = new Date().getTime();
     while ((new Date().getTime() - overtime) <= this.scanTimeout) {
-        this.allView = packageName(this.packageName).descMatches(content).find();
+        this.allView = descMatches(content).find();
         if (this.allView.length > 0) {
             return true;
         }
@@ -94,7 +89,7 @@ result.FindByDesx = function (content) {
 result.FindByText = function (content) {
     let overtime = new Date().getTime();
     while ((new Date().getTime() - overtime) <= this.scanTimeout) {
-        this.allView = packageName(this.packageName).textMatches(content).find();
+        this.allView = textMatches(content).find();
         if (this.allView.length > 0) {
             return true;
         }

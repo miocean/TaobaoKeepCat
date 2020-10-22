@@ -62,7 +62,7 @@ ui.action.on("click", function () {
     }
     if (__RUNNING__) {
         __RUNNING__ = false;
-        threads.interrupt();
+        thread.interrupt();
         ui.action.text("开始运行");
     } else {
         __RUNNING__ = true;
