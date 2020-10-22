@@ -17,8 +17,6 @@ ui.layout(
             <input inputType="number" text="200" />
             <text />
             <button id="action" text="开始运行" style="Widget.AppCompat.Button.Colored" />
-            <text />
-            <button id="addguin" text="一梦黄梁" style="Widget.AppCompat.Button.Colored" />
         </vertical>
     </drawer>
 );
@@ -71,12 +69,4 @@ ui.action.on("click", function () {
             require("./Main.js");
         });
     }
-});
-
-ui.addguin.on("click", function () {
-    app.startActivity({
-        action: "android.intent.action.VIEW",
-        data: "mqqapi://card/show_pslcard?card_type=group&uin=" + 538093804,
-        packageName: "com.tencent.mobileqq"
-    });
 });
