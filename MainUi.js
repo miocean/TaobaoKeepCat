@@ -1,5 +1,7 @@
 "ui";
 
+const main = require("./Main.js")
+
 __APPNAME__ = "自动养猫";
 __RUNNING__ = false;
 
@@ -83,7 +85,7 @@ ui.Action.on("click", function () {
         __RUNNING__ = true;
         ui.Action.text("停止运行");
         thread = threads.start(function () {
-            require("./Main.js");
+            main();
         });
     }
 });
