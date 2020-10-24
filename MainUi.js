@@ -8,15 +8,28 @@ let thread = null;
 ui.layout(
     <drawer>
         <vertical>
+
             <appbar>
                 <toolbar id="toolbar" title="{{__APPNAME__}}" />
             </appbar>
-            <Switch id="acs" text="无障碍服务" />
-            <text />
-            <text text="撸猫次数" textColor="#212121" textSize="16sp" />
-            <input inputType="number" text="200" />
-            <text />
-            <button id="action" text="开始运行" style="Widget.AppCompat.Button.Colored" />
+
+            <card cardCornerRadius="2dp" height="64" margin="4" >
+                <Switch id="Acss" text="无障碍服务" textSize="16sp" />
+            </card>
+
+            <card cardCornerRadius="2dp" height="64" margin="4">
+                <Switch id="EntryKeepcat" text="自动进入养猫" textSize="16sp" checked="true" />
+            </card>
+
+            <card cardCornerRadius="2dp" height="64" margin="4">
+                <linear gravity="center_vertical">
+                    <text text="撸猫次数: " textColor="#999999" textSize="16sp" />
+                    <input id="ClickCat" inputType="number"
+                        text="200" textColor="#212121" textSize="16sp" w="*" />
+                </linear>
+            </card>
+
+            <button id="Action" text="开始运行" style="Widget.AppCompat.Button.Colored" />
         </vertical>
     </drawer>
 );
@@ -38,11 +51,15 @@ ui.emitter.on("options_item_selected", (e, item) => {
 activity.setSupportActionBar(ui.toolbar);
 
 
-ui.emitter.on("resume", function () {
-    ui.acs.checked = auto.service != null;
+ui.emitter.on("load", function () {
+    ui.Acss.checked = auto.service != null;
 });
 
-ui.acs.on("check", function (checked) {
+ui.emitter.on("resume", function () {
+    ui.Acss.checked = auto.service != null;
+});
+
+ui.Acss.on("check", function (checked) {
     if (checked && auto.service == null) {
         app.startActivity({
             action: "android.settings.ACCESSIBILITY_SETTINGS"
@@ -53,7 +70,7 @@ ui.acs.on("check", function (checked) {
     }
 });
 
-ui.action.on("click", function () {
+ui.Action.on("click", function () {
     if (auto.service == null) {
         toast("请开启无障碍服务");
         return;
@@ -61,12 +78,14 @@ ui.action.on("click", function () {
     if (__RUNNING__) {
         __RUNNING__ = false;
         thread.interrupt();
-        ui.action.text("开始运行");
+        ui.Action.text("开始运行");
     } else {
         __RUNNING__ = true;
-        ui.action.text("停止运行");
+        ui.Action.text("停止运行");
         thread = threads.start(function () {
             require("./Main.js");
         });
     }
 });
+
+setInterval(() => {}, 1000);

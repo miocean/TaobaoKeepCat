@@ -1,187 +1,167 @@
 // auto;
 const uc = require("./UiControl.js");
 
+events.on("exit", function () {
+    print("运行结束")
+});
+
 // 延迟
 let _delay = 750;
 // 任务超时时间
 let _taskTimeout = 30 * 1000;
-let _overtime = null;
+let _overTime = null;
 // 撸猫次数
-let _clickCat = 200;
+let _clickCat = ui.ClickCat.text() || 200;
+
+function print() {
+    console.log(arguments);
+    for (let i = 0; i < arguments.length; i++) {
+        toast(arguments[i]);
+    }
+}
+
+function getTime() {
+    return new Date().getTime();
+}
 
 function ClickByDesc(content) {
     if (uc.FindByDesc(content)) {
-        console.log(uc.allView[uc.index].text());
-        toast(uc.allView[uc.index].text());
+        print(uc.allView[uc.index].text());
         uc.Click();
         sleep(_delay);
+        return true;
     }
+    return false;
 }
 
 function ClickByText(content) {
     if (uc.FindByText(content)) {
-        console.log(uc.allView[uc.index].text());
-        toast(uc.allView[uc.index].text());
+        print(uc.allView[uc.index].text());
         uc.Click();
         sleep(_delay);
+        return true;
     }
+    return false;
 }
 
-events.on("exit", function () {
-    console.log("运行完毕");
-    toast("运行完毕");
-    sleep(3000);
-});
-
-uc.action = "VIEW";
-uc.className = "com.taobao.browser.BrowserActivity";
-uc.data = "taobao://pages.tmall.com/wow/a/act/tmall/tmc/28098/3334/wupr?wh_pid=main-216034";
+if (ui.EntryKeepcat.checked) {
+    uc.action = "VIEW";
+    uc.className = "com.taobao.browser.BrowserActivity";
+    uc.data = "taobao://pages.tmall.com/wow/z/hdwk/act-20201111/assist-single?activityId=100074";
+}
 uc.packageName = "com.taobao.taobao";
+uc.Launch();
+sleep(_delay);
 
-if (uc.packageName == currentPackage()) {
-    console.log("运行请前关闭淘宝");
-    toast("运行请前关闭淘宝");
-    _overtime = new Date().getTime();
-    while (uc.packageName == currentPackage()) {
-        if ((new Date().getTime() - _overtime) >= 5000) {
-            console.log("尝试关闭淘宝超时");
-            toast("尝试关闭淘宝超时");
-            sleep(_delay);
-            console.log("请你手动关闭淘宝");
-            toast("请你手动关闭淘宝");
-            sleep(_delay);
-            console.log("关闭淘宝后请重新运行");
-            toast("关闭淘宝后请重新运行");
-            sleep(_delay);
-            exit();
+threads.start(function () {
+    var onexit = setInterval(() => {
+        if (uc.packageName != currentPackage()) {
+            if (ui.Action.text() == "停止运行") {
+                ui.run(function () {
+                    ui.Action.click();
+                });
+                // print("停止运行");
+            }
         }
-        console.log("正在尝试关闭淘宝");
-        back();
-        sleep(25);
+    }, 250);
+});
+sleep(_delay);
+
+
+
+if (ui.EntryKeepcat.checked) {
+    uc.scanTimeout = 5000;
+
+    ClickByText("去喂养猫猫")
+
+    uc.scanTimeout = 1000;
+    sleep(_delay);
+}
+
+_overTime = getTime();
+while (getTime() - _overTime <= 5000) {
+    if (currentActivity() == "com.taobao.browser.BrowserActivity") {
+        break;
+    } else {
+        console.log(currentActivity());
     }
     sleep(_delay);
 }
 
-uc.Launch();
+if (!ui.EntryKeepcat.checked) {
+    sleep(_delay * 4);
+}
 
-// console.show();
-
-sleep(_delay);
-
-threads.start(function () {
-    setInterval(() => {
-        if (uc.packageName != currentPackage()) {
-            exit();
-        }
-    }, 250);
-});
-
-uc.scanTimeout = 5000;
-ClickByText("活动链接");
-
-uc.scanTimeout = 1500;
 ClickByText(/[0-9]+喵币点击领取/);
 ClickByText(/赚喵币|领猫币/);
+ClickByText(/签到/);
 
-console.log("开始浏览任务");
-toast("开始浏览任务");
-sleep(_delay);
 
-function BaseTask(content) {
-    uc.scanTimeout = 1000;
+
+function BaseTask(task) {
+    uc.scanTimeout = _delay;
     let index = 0;
-    let endLength = 0;
-    let x = device.width / 4 * 3;
-    let y = device.height / 2;
-    let mX = (device.width - x) / 4;
-    let mY = (device.height - y) / 4;
-    if (content == "去完成") {
-        let a = uc.FindByText(/邀请好友一起撸猫\([0-4]\/5\)/);
-        let b = uc.FindByText(/登录淘宝特价版送红包\(0\/1\)/);
-        index = a ? 1 : 0;
-        endLength = a && b ? 2 : a ? 1 : b ? 1 : 0;
+    let endlen = 0;
+    let w = device.width,
+        h = device.height;
+    let x = w * 0.75,
+        y = h * 0.5;
+    let maxX = w * 0.125,
+        maxY = h * 0.25;
+    let btn;
+    if (task == "去完成") {
+        let a = uc.FindByText(/邀请好友一起撸猫\([0-4]\/5\)/),
+            b = uc.FindByText(/登录淘宝特价版送红包\(0\/1\)/),
+            c = uc.FindByText(/参与组队领红包\(0\/1\)/);
+        if (a) {
+            index += 1;
+            endlen += 1;
+        }
+        if (b) endlen += 1;
+        if (c) {
+            index += 1;
+            endlen += 1;
+        }
     }
     do {
-        if (uc.FindByText(content)) {
-            if (uc.allView.length == endLength) break;
+        let flag = false;
+        if (uc.FindByText(task)) {
+            btn = uc.allView;
             uc.index = index;
             if (uc.Click()) {
-                console.log(uc.allView[index].text());
-                toast(uc.allView[index].text());
+                print(uc.allView[index].text());
                 sleep(_delay);
-                _overtime = new Date().getTime();
-                while ((time = new Date().getTime() - _overtime) <= _taskTimeout) {
-                    swipe(x + random(-mX, mX), y + random(-mY, mY),
-                        x + random(-mX, mX), y + random(-mY, mY), random(250, 750));
-                    console.log(time / 1000 + "秒");
-                    if (uc.FindByText(/.*完成.*/) || uc.FindByDesc(/.*完成.*/)) {
-                        console.log("任务完成");
+                _overTime = getTime();
+                while ((time = getTime() - _overTime) <= _taskTimeout) {
+                    swipe(x + random(-maxX, maxX), y + random(0, maxY),
+                        x + random(-maxX, maxX), y + random(-maxY, 0), random(250, 750));
+                    if (!uc.FindByText(/浏览[0-9]+秒/) && !uc.FindByDesc(/浏览[0-9]+秒/) && flag) {
+                        print("任务完成");
                         break;
+                    } else if (uc.FindByText(/浏览[0-9]+秒/) || uc.FindByDesc(/浏览[0-9]+秒/)) {
+                        console.log(uc.allView[0].text() || uc.allView[0].desc());
+                        flag = true;
+                        sleep(_delay);
                     }
+                    print(task + ": 持续" + time / 1000 + "秒");
                 }
                 back();
                 sleep(_delay);
                 ClickByText(/.*退出.*/);
             }
         }
-    } while (uc.allView != null);
-    console.log("[ " + content + " ]: 完成");
-    toast("[ " + content + " ]: 完成");
-    sleep(_delay);
+        sleep(_delay);
+    } while (btn != null && btn.length > endlen)
+    print("[ " + task + " ]: 完成");
 }
 
-BaseTask(/去浏览|去逛逛|去搜索/);
+BaseTask("去浏览");
+BaseTask("去逛逛");
+BaseTask("去搜索");
+BaseTask("逛一逛");
 BaseTask("去完成");
 sleep(_delay);
 
-if (uc.FindByText(/.*领取奖励.*/)) {
-    for (let i = 0; i < uc.allView.length; i++) {
-        let view = uc.allView[i];
-        uc.index = i;
-        uc.Click();
-        sleep(_delay);
-    }
-}
+while (ClickByText("领取奖励") || ClickByDesc("领取奖励")) { sleep(_delay); }
 
-ClickByText("关闭");
-
-console.log("开始喂猫");
-toast("开始喂猫");
-sleep(_delay);
-
-_taskTimeout = 3 * 1000;
-_overtime = new Date().getTime();
-while ((new Date().getTime() - _overtime) <= _taskTimeout) {
-    if (uc.FindByText(/.*喂猫升级.*|.*知道了.*|.*选兴趣.*|.*收下.*|.*选好了.*|.*领取奖励.*|.*立即领取.*/)) {
-        console.log(uc.allView[uc.index].text());
-        uc.Click();
-        _overtime = new Date().getTime();
-        sleep(_delay);
-        continue;
-    }
-    if (uc.FindByText(/.*喵币不足.*|.*领取成就勋章.*/)) break;
-}
-
-ClickByText("关闭");
-console.log("喂猫完成");
-toast("喂猫完成");
-sleep(_delay);
-
-console.log("撸猫" + _clickCat + "次");
-toast("撸猫" + _clickCat + "次");
-sleep(_delay);
-
-if (uc.FindByText(/.*点击撸猫.*/)) {
-    let views = uc.allView;
-    for (let i = 1; i <= _clickCat; i++) {
-        uc.ClickPointRandom();
-        console.log("撸猫" + i + "次");
-        sleep(random(50, 100));
-        if (i % 50 == 0) {
-            ClickByText(/.*领取奖励.*|.*立即领取.*|.*宝箱.*/);
-            ClickByText("关闭");
-            uc.allView = views;
-        }
-    }
-}
 exit();

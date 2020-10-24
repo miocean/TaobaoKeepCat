@@ -73,7 +73,7 @@ result.WaitForLaunch = function () {
     return false;
 }
 
-result.FindByDesx = function (content) {
+result.FindByDesc = function (content) {
     let overtime = new Date().getTime();
     while ((new Date().getTime() - overtime) <= this.scanTimeout) {
         this.allView = descMatches(content).find();
