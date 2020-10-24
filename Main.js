@@ -88,9 +88,7 @@ while (getTime() - _overTime <= 5000) {
     sleep(_delay);
 }
 
-if (!ui.EntryKeepcat.checked) {
-    sleep(_delay * 4);
-}
+text("赚喵币").findOne(5000);
 
 ClickByText(/[0-9]+喵币点击领取/);
 ClickByText(/赚喵币|领猫币/);
@@ -129,7 +127,7 @@ function BaseTask(task) {
             btn = uc.allView;
             uc.index = index;
             if (uc.Click()) {
-                print(uc.allView[index].text());
+                // print(uc.allView[index].text());
                 sleep(_delay);
                 _overTime = getTime();
                 while ((time = getTime() - _overTime) <= _taskTimeout) {
