@@ -127,6 +127,7 @@ function BaseTask(task) {
             btn = uc.allView;
             uc.index = index;
             if (uc.Click()) {
+                if (btn.allView.length <= endlen) break;
                 // print(uc.allView[index].text());
                 sleep(_delay);
                 _overTime = getTime();
